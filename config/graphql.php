@@ -77,6 +77,9 @@ return [
             'query' => [
                 'blog' => App\GraphQL\Queries\BlogQuery::class,
                 'blogs' => App\GraphQL\Queries\BlogsQuery::class,
+                'user' => App\GraphQL\Queries\UserQuery::class,
+                'users' => App\GraphQL\Queries\UsersQuery::class,
+                'friends' => App\GraphQL\Queries\FriendsQuery::class,
             ],
             'mutation' => [
                 'createBlog' => App\graphql\Mutations\CreateBlogMutation::class,
@@ -86,6 +89,8 @@ return [
             // The types only available in this schema
             'types' => [
                 'Blog' => App\GraphQL\Types\BlogType::class,
+                'User' => App\GraphQL\Types\UserType::class,
+                'Friend' => App\GraphQL\Types\FriendType::class
             ],
 
             // Laravel HTTP middleware
@@ -110,6 +115,8 @@ return [
     //
     'types' => [
         'Blog' => App\GraphQL\Types\BlogType::class,
+        'User' => App\GraphQL\Types\UserType::class,
+        'Friend' => App\GraphQL\Types\FriendType::class
         // ExampleType::class,
         // ExampleRelationType::class,
         // \Rebing\GraphQL\Support\UploadType::class,

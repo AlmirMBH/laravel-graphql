@@ -1,66 +1,97 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## GraphQL with Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+### Create a Laravel project
+Create a Laravel project 
+- composer create-project laravel/laravel NAME-OF-PROJECT
 
-## About Laravel
+Add a Blog model and a seeder
+- php artisan make:model -ms
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Add data in the seeder
+public function run(): void
+    {
+        Blog::insert([
+            [
+                'title' => 'This is title 1',
+                'content' => 'Something something description 1',
+            ],
+            // add more data
+        ]);
+    }
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+#### Create and Seed the Database 
+Get into mysql (add password and change username if required):
+- mysql -u root
 
-## Learning Laravel
+Create database: 
+- create schema graphql_test
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Add database credentials in the .env file (adjust username and password, if necessary)
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=graphql_test
+DB_USERNAME=root
+DB_PASSWORD=
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Execute migrations
+- php artisan migrate
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Seed the database
+- php artisan db:seed
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### Test the Project
+Start the project
+- php artisan serve
 
-### Premium Partners
+Open the browser and hit the following URL: http://localhost:8000/
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
 
-## Contributing
+### GraphQL
+Here is a short list of GraphQL libraries that you can find on the GraphQL website that are most commonly used:
+- webonyx/graphql-php
+- wp-graphql/wp-graphql
+- nuwave/lighthouse
+- rebing/graphql-laravel
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+The rebing/graphql-laravel library is used in this project.
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### GraphQL Setup
+Install rebing/graphql-laravel by running the following command:
 
-## Security Vulnerabilities
+- composer require rebing/graphql-laravel
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Copy the rebing/graphql-library to the vendor by running the following command:
 
-## License
+- php artisan vendor:publish --provider="Rebing\GraphQL\GraphQLServiceProvider"
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+If the publish is successful, you are going to get the following response:
+
+Copied File [/vendor/rebing/graphql-laravel/config/config.php] To [/config/graphql.php]
+Publishing complete.
+
+
+## GraphQL Queries
+Define a type for the Blog model, see app/GraphQL/Types/BlogType.php.
+Create GET queries, see app/GraphQL/Queries/BlogQuery.php and app/GraphQL/Queries/BlogsQuery.php
+Create POST queries (mutations), see app/GraphQL/Mutations/CreateBlogMutation.php, app/GraphQL/Mutations/UpdateBlogMutation.php and app/GraphQL/Mutations/DeleteBlogMutation.php.
+
+## Register Custom Schema
+Search for classes in config/graphql.php and see how they are added in the configuration.
+Clear cache by running the following command: 
+- php artisan optimize
+
+Make sure that new files are included in the project (vendor etc.) by running the following command:
+- composer dumpautoload
+
+
+## Testing the queries
+Start the server by running the following command: 
+- php artisan serve
+
+Open an API tool like Postman. Click cmd + N (mac) or ctrl + N (windows). Select GraphQl and type in your domain + /graphql. For example, http://localhost:8000/graphql. 
+The following schemas will appear inside the postman: blog, blogs, createBlog, updateBlog, deleteBlog.
+Click on any of them and, if necessary, add input data e.g. ID. Execute the query and the output should appear.

@@ -80,6 +80,7 @@ return [
                 'user' => App\GraphQL\Queries\UserQuery::class,
                 'users' => App\GraphQL\Queries\UsersQuery::class,
                 'friends' => App\GraphQL\Queries\FriendsQuery::class,
+                'UserWithFriends' => App\GraphQL\Queries\UserWithFriendsQuery::class,
             ],
             'mutation' => [
                 'createBlog' => App\graphql\Mutations\CreateBlogMutation::class,

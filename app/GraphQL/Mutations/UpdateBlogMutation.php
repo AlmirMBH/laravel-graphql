@@ -1,6 +1,7 @@
 <?php
 
 namespace App\GraphQL\Mutations;
+
 use App\Models\Blog;
 use Rebing\GraphQL\Support\Mutation;
 use GraphQL\Type\Definition\Type;
@@ -11,6 +12,7 @@ class UpdateBlogMutation extends Mutation
     protected $attributes = [
         'name' => 'updateBlog',
     ];
+
     public function type(): Type
     {
         return GraphQL::type('Blog');
@@ -34,7 +36,7 @@ class UpdateBlogMutation extends Mutation
         ];
     }
 
-    public function resolve($root, $args)
+    public function resolve($root, $args): Blog|null
     {
         $blog = Blog::findOrFail($args['id']);
         $blog->fill($args);

@@ -1,6 +1,6 @@
 <?php
-
 namespace App\GraphQL\Mutations;
+
 use App\Models\Blog;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Mutation;
@@ -26,7 +26,8 @@ class DeleteBlogMutation extends Mutation
             ],
         ];
     }
-    public function resolve($root, $args)
+
+    public function resolve($root, $args): bool
     {
         return Blog::findOrFail($args['id'])->delete();
     }

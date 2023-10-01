@@ -1,6 +1,7 @@
 <?php
 
 namespace App\GraphQL\Queries;
+
 use App\Models\Blog;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
@@ -17,6 +18,9 @@ class BlogQuery extends Query
         return GraphQL::type('Blog');
     }
 
+    /**
+     * Required fields are defined in the args method
+     */
     public function args(): array
     {
         return[
@@ -25,6 +29,11 @@ class BlogQuery extends Query
                 'type' => Type::int(),
                 'rules' => ['required'],
             ],
+//            'title' => [
+//                'name' => 'title',
+//                'type' => Type::string(),
+//                'rules' => ['required'],
+//            ],
         ];
     }
 

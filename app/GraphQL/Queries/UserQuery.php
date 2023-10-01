@@ -1,6 +1,7 @@
 <?php
 
 namespace App\GraphQL\Queries;
+
 use App\Models\User;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
@@ -28,7 +29,7 @@ class UserQuery extends Query
         ];
     }
 
-    public function resolve($root, $args)
+    public function resolve($root, $args): User|null
     {
         return User::find($args['id']);
     }

@@ -33,7 +33,7 @@ class UserType extends GraphQLType
             'friends' => [
                 'type' => Type::listOf(GraphQL::type('Friend')),
                 'description' => 'List of friends for the user',
-                'resolve' => function ($root, $args) {
+                'resolve' => function ($root) {
                     return $root->friends;
                 },
             ],

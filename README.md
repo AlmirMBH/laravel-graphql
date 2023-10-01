@@ -14,7 +14,7 @@ php artisan make:modelName -ms
 The 'm' stands for model migration and 's' for model seeder.
 
 Add data in the seeder
-
+```
 public function run(): void
     {
         Blog::insert([
@@ -25,7 +25,7 @@ public function run(): void
             // add more data
         ]);
     }
-
+```
 
 #### Create and Seed the Database 
 Get into mysql (add password and change username if required):
@@ -117,10 +117,10 @@ one instance of a User model is different from returning a collection (see 'type
 Finally, you need to add your schema/query in the config/graphql.php:
 ```
 'schemas' => [
-'default' => [
-'query' => [
-'user' => App\GraphQL\Queries\UserQuery::class,
-...
+    'default' => [
+        'query' => [
+            'user' => App\GraphQL\Queries\UserQuery::class,
+            ...
 ```
 
 Other schemas/queries for the User model (e.g. delete or update) are created in the same way.
@@ -141,7 +141,7 @@ composer dumpautoload
 ## Fetch related models
 If you want to fetch related models (e.g. User and Friends), add regular relationship methods in User and Friend models (for the sake of simplicity one-to-many used in this project) and create a separate GraphQL query file e.g. UserWithFriendsQuery (no need to create a new Laravel model). Then, add the UserWithFriendsQuery in the config/graphql.php query list.
 Finally, in the User type add the 'friends' field that will return the Friend data in the query.
-
+```
 'friends' => [
         'type' => Type::listOf(GraphQL::type('Friend')),
         'description' => 'List of friends for the user',
@@ -149,6 +149,7 @@ Finally, in the User type add the 'friends' field that will return the Friend da
             return $user->friends;
         },
     ],
+```
 
 ## Testing the queries
 Start the server by running the following command: 
@@ -159,24 +160,24 @@ php artisan serve
 Open an API tool like Postman. Click cmd + N (mac) or ctrl + N (windows). Select GraphQl and type in your domain + /graphql. For example, http://localhost:8000/graphql. 
 
 The following schemas, divided into Query and Mutation sections that you specified in the project (folder structure), will appear inside the postman: 
-- blog, 
-- blogs,
-- user,
-- users,
-- friends,
-- UserWithFriends,
-- createBlog, 
-- updateBlog, 
-- deleteBlog.
+- blog
+- blogs
+- user
+- users
+- friends
+- UserWithFriends
+- createBlog
+- updateBlog 
+- deleteBlog
 - 
 Click on any of them and, if necessary, add input data e.g. ID. Execute the query and the output should appear.
 For example, a GET user query should be like this:
 ```
 query User {
     user(id: 1) {
-    id
-    name
-    email
+        id
+        name
+        email
     }
 }
 ```
@@ -186,9 +187,9 @@ and the response should look like this:
 {
     "data": {
         "user": {
-        "id": 1,
-        "name": "Ms. Estell Brekke DVM",
-        "email": "leon99@example.net"
+            "id": 1,
+            "name": "Ms. Estell Brekke DVM",
+            "email": "leon99@example.net"
         }
     }
 }

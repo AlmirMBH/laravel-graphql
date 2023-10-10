@@ -168,14 +168,16 @@ Open an API tool like Postman. Click cmd + N (mac) or ctrl + N (windows). Select
 
 The following schemas, divided into Query and Mutation sections that you specified in the graphql.php, will appear
 inside the postman: 
-Query
+
+#### Query
 - blog
 - blogs
 - user
 - users
 - friends
 - UserWithFriends
-Mutation
+
+#### Mutation
 - createBlog
 - updateBlog 
 - deleteBlog

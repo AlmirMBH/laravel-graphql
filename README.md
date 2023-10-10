@@ -112,9 +112,20 @@ Friends model). The relationship with your Laravel model is specified in the '$a
 UserType for more info.
 Then, create GET schema/query for User, see app/GraphQL/Queries/UserQuery.php. In this query in the 'args'
 method, you specify the required (input) fields, as well as the relationship between the UserQuery (GraphQL)
-and your Laravel model (User). This is done in 'type' and 'resolve' methods. Bear in mind that returning
-one instance of a User model is different from returning a collection (see 'type' method in UsersQuery).
-Finally, you need to add your schema/query in the config/graphql.php:
+and your Laravel model (User).
+```
+'friends' => [
+        'type' => Type::listOf(GraphQL::type('Friend')),
+        'description' => 'List of friends for the user',
+        'resolve' => function ($user, $args) {
+            return $user->friends;
+        },
+    ],
+```
+
+This is done in 'type' and 'resolve' methods. Bear in mind that returning one instance of a User model is different from
+returning a collection (see 'type' method in UsersQuery). Finally, you need to add your schema/query in the
+config/graphql.php:
 ```
 'schemas' => [
     'default' => [
@@ -139,17 +150,12 @@ composer dumpautoload
 ```
 
 ## Fetch related models
-If you want to fetch related models (e.g. User and Friends), add regular relationship methods in User and Friend models (for the sake of simplicity one-to-many used in this project) and create a separate GraphQL query file e.g. UserWithFriendsQuery (no need to create a new Laravel model). Then, add the UserWithFriendsQuery in the config/graphql.php query list.
-Finally, in the User type add the 'friends' field that will return the Friend data in the query.
-```
-'friends' => [
-        'type' => Type::listOf(GraphQL::type('Friend')),
-        'description' => 'List of friends for the user',
-        'resolve' => function ($user, $args) {
-            return $user->friends;
-        },
-    ],
-```
+If you want to fetch related models (e.g. User and Friends) in a query different from UserQuery, add regular
+relationship methods in User and Friend Laravel models (for the sake of simplicity one-to-many used in this project) and
+create a separate GraphQL query file e.g. UserWithFriendsQuery (no need to create a new Laravel model). Then, add the
+UserWithFriendsQuery in the config/graphql.php query list. Restart the GraphQl collection in the API tool (e.g. Postman)
+and the new GraphQL will appear in the list.
+
 
 ## Testing the queries
 Start the server by running the following command: 
@@ -157,21 +163,25 @@ Start the server by running the following command:
 php artisan serve
 ```
 
-Open an API tool like Postman. Click cmd + N (mac) or ctrl + N (windows). Select GraphQl and type in your domain + /graphql. For example, http://localhost:8000/graphql. 
+Open an API tool like Postman. Click cmd + N (mac) or ctrl + N (windows). Select GraphQl and type in your domain +
+/graphql. For example, http://localhost:8000/graphql. 
 
-The following schemas, divided into Query and Mutation sections that you specified in the project (folder structure), will appear inside the postman: 
+The following schemas, divided into Query and Mutation sections that you specified in the graphql.php, will appear
+inside the postman: 
+Query
 - blog
 - blogs
 - user
 - users
 - friends
 - UserWithFriends
+Mutation
 - createBlog
 - updateBlog 
 - deleteBlog
-- 
+
 Click on any of them and, if necessary, add input data e.g. ID. Execute the query and the output should appear.
-For example, a GET user query should be like this:
+For example, GET user query should look like this:
 ```
 query User {
     user(id: 1) {
@@ -194,3 +204,9 @@ and the response should look like this:
     }
 }
 ```
+
+The required input fields have 'ARG' label next to the input field. The grey labels next to each field specify what the
+return data type should be. For example, [Blog] means that the return type is an array of Blogs. If it is required in
+the 'types', the return type might be [Blog]!, [Blog!] or [Blog!]!. If '!' is outside the brackets, it means that
+the array must be returned, even if it is empty. If '!' is inside the brackets, it means that 'Blog' must be returned.
+If '!' is both inside and outside the brackets it means that an array of Blogs must be returned.
